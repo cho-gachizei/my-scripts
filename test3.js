@@ -2,7 +2,7 @@ javascript:(function() {
     'use strict';
 
     const ids = ['fieldname3_1_cb0', 'fieldname3_1_cb1', 'fieldname3_1_cb2', 'fieldname3_1_cb3', 'fieldname3_1_cb32', 'fieldname8_1_cb0'];
-    const selectIds = ['fieldname9_1']; // プルダウン項目のIDを追加
+    const selectIds = ['fieldname9_1','fieldname2_1','fieldname1_1']; 
 
     const save = () => {
         const state = ids.reduce((acc, id) => {
