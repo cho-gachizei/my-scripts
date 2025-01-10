@@ -3,6 +3,7 @@ javascript:(function() {
 
     const ids = ['fieldname3_1_cb0', 'fieldname3_1_cb1', 'fieldname3_1_cb2', 'fieldname3_1_cb3', 'fieldname3_1_cb32', 'fieldname8_1_cb0'];
     const selectIds = ['fieldname9_1']; // プルダウン項目のIDを追加
+    const inputIds = ['fieldname2_1']; // 直接入力項目のIDを追加
 
     const save = () => {
         const state = ids.reduce((acc, id) => {
@@ -17,16 +18,24 @@ javascript:(function() {
             return acc;
         }, {});
 
+        const inputState = inputIds.reduce((acc, id) => {
+            const input = document.getElementById(id);
+            if (input) acc[id] = input.value;
+            return acc;
+        }, {});
+
         localStorage.setItem('checkboxStates', JSON.stringify(state));
         localStorage.setItem('selectStates', JSON.stringify(selectState));
+        localStorage.setItem('inputStates', JSON.stringify(inputState));
         console.log('保存しました！');
     };
 
     const load = () => {
         const state = JSON.parse(localStorage.getItem('checkboxStates'));
         const selectState = JSON.parse(localStorage.getItem('selectStates'));
+        const inputState = JSON.parse(localStorage.getItem('inputStates'));
 
-        if (!state && !selectState) {
+        if (!state && !selectState && !inputState) {
             console.log('保存された状態がありません。');
             return;
         }
@@ -42,6 +51,13 @@ javascript:(function() {
             const select = document.getElementById(id);
             if (select && selectState.hasOwnProperty(id)) {
                 select.value = selectState[id];
+            }
+        });
+
+        inputIds.forEach(id => {
+            const input = document.getElementById(id);
+            if (input && inputState.hasOwnProperty(id)) {
+                input.value = inputState[id];
             }
         });
 
