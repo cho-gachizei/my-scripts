@@ -4,8 +4,16 @@ javascript:(function() {
     let ids = [];
 
     const fetchJSON = async (url) => {
-        const response = await fetch(url);
-        return response.json();
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        } catch (error) {
+            console.error('Error fetching JSON:', error);
+            return null;
+        }
     };
 
     const save = () => {
@@ -34,7 +42,13 @@ javascript:(function() {
     };
 
     const initialize = async () => {
-        ids = await fetchJSON('path/to/ids.json'); // 外部JSONファイルのパスを指定
+        ids = await fetchJSON('https://raw.githubusercontent.com/cho-gachizei/my-scripts/main/json1.json'); // 外部JSONファイルのパスを指定
+        if (!ids) {
+            console.error('Failed to load IDs from JSON.');
+            return;
+        }
+        console.log('Loaded IDs:', ids);
+
         const dialog = document.createElement('div');
         dialog.innerHTML = `
             <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000;">
