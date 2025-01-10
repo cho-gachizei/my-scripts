@@ -35,7 +35,7 @@ javascript:(function() {
          'fieldname3_1_cb30',                // 🟨：4期：★3：黄金の角笛：+5％
          'fieldname3_1_cb31',                // 🟨：5期：★3：水力推進フリッパー：+5％
          'fieldname3_1_cb32',                // 🟨：5期：★3：超人タブレット：+5％
-         'fieldname8_1_cb0'                  // マスターヤン：陽状態：+20％
+         'fieldname8_1_cb0',                // マスターヤン：陽状態：+20％
     ];
  // プルダウン
     const selectIds = ['fieldname9_1']; // 協力作戦   
@@ -128,4 +128,44 @@ javascript:(function() {
         });
 
         inputIds.forEach(id => {
-            const input = document
+            const input = document.getElementById(id);
+            if (input && inputState.hasOwnProperty(id)) {
+                input.value = inputState[id];
+            }
+        });
+
+        radioIds.forEach(id => {
+            const radio = document.getElementById(id);
+            if (radio && radioState.hasOwnProperty(id)) {
+                radio.checked = radio.value === radioState[id];
+            }
+        });
+
+        console.log('復元しました！');
+    };
+
+    const dialog = document.createElement('div');
+    dialog.innerHTML = `
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.5); z-index: 1000;">
+            <p>チェック状態を保存しますか？「読み込み」を押すと復元します。</p>
+            <button id="saveButton">保存</button>
+            <button id="loadButton">読み込み</button>
+            <button id="closeButton">閉じる</button>
+        </div>
+    `;
+    document.body.appendChild(dialog);
+
+    document.getElementById('saveButton').addEventListener('click', () => {
+        save();
+        document.body.removeChild(dialog);
+    });
+
+    document.getElementById('loadButton').addEventListener('click', () => {
+        load();
+        document.body.removeChild(dialog);
+    });
+
+    document.getElementById('closeButton').addEventListener('click', () => {
+        document.body.removeChild(dialog);
+    });
+})();
