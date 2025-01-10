@@ -17,6 +17,10 @@ javascript:(function() {
     };
 
     const save = () => {
+        if (!Array.isArray(ids)) {
+            console.error('ids is not an array:', ids);
+            return;
+        }
         const state = ids.reduce((acc, id) => {
             const checkbox = document.getElementById(id);
             if (checkbox) acc[id] = checkbox.checked;
@@ -42,11 +46,12 @@ javascript:(function() {
     };
 
     const initialize = async () => {
-        ids = await fetchJSON('https://raw.githubusercontent.com/cho-gachizei/my-scripts/main/json1.json'); // 外部JSONファイルのパスを指定
-        if (!ids) {
-            console.error('Failed to load IDs from JSON.');
+        const json = await fetchJSON('https://raw.githubusercontent.com/cho-gachizei/my-scripts/main/json1.json'); // 外部JSONファイルのパスを指定
+        if (!json || !Array.isArray(json.ids)) {
+            console.error('Failed to load IDs from JSON or IDs is not an array:', json);
             return;
         }
+        ids = json.ids;
         console.log('Loaded IDs:', ids);
 
         const dialog = document.createElement('div');
